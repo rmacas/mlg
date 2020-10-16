@@ -1,5 +1,5 @@
 config.json - Configuring a training session
-----
+-----
 
 The parameters present in a `config.json` file allow one to configure a training session. Each of these parameters is described below:
 
