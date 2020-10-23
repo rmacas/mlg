@@ -26,7 +26,10 @@ class DenoisingWavenet():
 
         self.num_condition_classes = config['dataset']['num_condition_classes']
 
+        # not really sure about this one
+        # it's just ceiling of np.log2(29) where 29 is num cond classes
         self.condition_input_length = self.get_condition_input_length(self.config['model']['condition_encoding'])
+        # here it is calculating basically the length of all nodes from these dilated stacks?
         self.receptive_field_length = util.compute_receptive_field_length(config['model']['num_stacks'], self.dilations,
                                                                           config['model']['filters']['lengths']['res'],
                                                                           1)
@@ -38,6 +41,8 @@ class DenoisingWavenet():
             self.target_field_length = target_field_length
             self.input_length = self.receptive_field_length + (self.target_field_length - 1)
         else:
+            # sitas target field length of 1601 atrodo kaip magija, is kur jis gautas?
+            # target field length greiciui, turbut mazdaug random, bet nera svarbu manau
             self.target_field_length = config['model']['target_field_length']
             self.input_length = self.receptive_field_length + (self.target_field_length - 1)
 
@@ -216,7 +221,7 @@ class DenoisingWavenet():
         data_expanded = layers.AddSingletonDepth()(data_input)
         data_input_target_field_length = layers.Slice(
             (slice(self.samples_of_interest_indices[0], self.samples_of_interest_indices[-1] + 1, 1), Ellipsis),
-            (self.padded_target_field_length,1),
+            (self.padded_target_field_length, 1),
             name='data_input_target_field_length')(data_expanded)
 
         data_out = keras.layers.Convolution1D(self.config['model']['filters']['depths']['res'],

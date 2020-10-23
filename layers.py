@@ -3,7 +3,6 @@
 
 import keras
 
-
 class AddSingletonDepth(keras.layers.Layer):
 
     def call(self, x, mask=None):

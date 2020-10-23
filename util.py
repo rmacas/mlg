@@ -24,7 +24,7 @@ def l1_l2_loss(y_true, y_pred, l1_weight, l2_weight):
 
 
 def compute_receptive_field_length(stacks, dilations, filter_length, target_field_length):
-
+# for this example stacks 3, dilations 2,4 etc, filter length 3, target length 1
     half_filter_length = (filter_length-1)/2
     length = 0
     for d in dilations:
