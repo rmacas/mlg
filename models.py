@@ -48,8 +48,8 @@ class DenoisingWavenet():
 
         self.target_padding = config['model']['target_padding']
         self.padded_target_field_length = self.target_field_length + 2 * self.target_padding
-        self.half_target_field_length = self.target_field_length / 2
-        self.half_receptive_field_length = self.receptive_field_length / 2
+        self.half_target_field_length = self.target_field_length // 2
+        self.half_receptive_field_length = self.receptive_field_length // 2
         self.num_residual_blocks = len(self.dilations) * self.num_stacks
         self.activation = keras.layers.Activation('relu')
         self.samples_of_interest_indices = self.get_padded_target_field_indices()
@@ -91,11 +91,11 @@ class DenoisingWavenet():
                 last_checkpoint = checkpoints[-1]
                 last_checkpoint_path = os.path.join(self.checkpoints_path, last_checkpoint)
                 self.epoch_num = int(last_checkpoint[11:16])
-            print 'Loading model from epoch: %d' % self.epoch_num
+            print('Loading model from epoch: %d' % self.epoch_num)
             model.load_weights(last_checkpoint_path)
 
         else:
-            print 'Building new model...'
+            print('Building new model...')
 
             if not os.path.exists(self.config['training']['path']):
                 os.mkdir(self.config['training']['path'])
@@ -149,8 +149,8 @@ class DenoisingWavenet():
     def get_callbacks(self):
 
         return [
-            keras.callbacks.ReduceLROnPlateau(patience=self.config['training']['early_stopping_patience'] / 2,
-                                              cooldown=self.config['training']['early_stopping_patience'] / 4,
+            keras.callbacks.ReduceLROnPlateau(patience=self.config['training']['early_stopping_patience'] // 2,
+                                              cooldown=self.config['training']['early_stopping_patience'] // 4,
                                               verbose=1),
             keras.callbacks.EarlyStopping(patience=self.config['training']['early_stopping_patience'], verbose=1,
                                           monitor='loss'),
@@ -160,7 +160,7 @@ class DenoisingWavenet():
 
     def fit_model(self, train_set_generator, num_train_samples, test_set_generator, num_test_samples, num_epochs):
 
-        print 'Fitting model with %d training samples and %d test samples...' % (num_train_samples, num_test_samples)
+        print('Fitting model with %d training samples and %d test samples...' % (num_train_samples, num_test_samples))
 
         self.model.fit_generator(train_set_generator,
                                  num_train_samples,
@@ -189,7 +189,7 @@ class DenoisingWavenet():
                      target_sample_index + self.half_target_field_length + self.target_padding + 1)
 
     def get_target_sample_index(self):
-        return int(np.floor(self.input_length / 2.0))
+        return int(np.floor(self.input_length // 2.0))
 
     def get_metrics(self):
 
