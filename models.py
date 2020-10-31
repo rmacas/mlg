@@ -113,7 +113,7 @@ class DenoisingWavenet():
 
         model.compile(optimizer=self.optimizer,
                       loss={'data_output_1': self.out_1_loss, 'data_output_2': self.out_2_loss}, metrics=self.metrics)
-        self.config['model']['num_params'] = model.count_params()
+        self.config['model']['num_params'] = int(model.count_params())
 
         config_path = os.path.join(self.config['training']['path'], 'config.json')
         if not os.path.exists(config_path):
