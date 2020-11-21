@@ -64,6 +64,8 @@ def get_dataset(config, model):
         return datasets.VCTKAndDEMANDDataset(config, model).load_dataset()
     elif config['dataset']['type'] == 'nsdtsea':
         return datasets.NSDTSEADataset(config, model).load_dataset()
+    elif config['dataset']['type'] == 'sgs':
+        return datasets.SGDataset(config, model).load_dataset()
 
 
 def training(config, cla):
@@ -114,7 +116,7 @@ def inference(config, cla):
     output_folder_path = get_valid_output_folder_path(samples_folder_path)
 
     #If input_path is a single wav file, then set filenames to single element with wav filename
-    if cla.noisy_input_path.endswith('.wav'):
+    if cla.noisy_input_path.endswith('.txt'):
         filenames = [cla.noisy_input_path.rsplit('/', 1)[-1]]
         cla.noisy_input_path = cla.noisy_input_path.rsplit('/', 1)[0] + '/'
         if cla.clean_input_path is not None:
@@ -122,20 +124,21 @@ def inference(config, cla):
     else:
         if not cla.noisy_input_path.endswith('/'):
             cla.noisy_input_path += '/'
-        filenames = [filename for filename in os.listdir(cla.noisy_input_path) if filename.endswith('.wav')]
+        filenames = [filename for filename in os.listdir(cla.noisy_input_path) if filename.endswith('.txt')]
 
     clean_input = None
     for filename in filenames:
-        noisy_input = util.load_wav(cla.noisy_input_path + filename, config['dataset']['sample_rate'])
+        noisy_input = util.load_txt(cla.noisy_input_path + filename, config['dataset']['sample_rate'])
         if cla.clean_input_path is not None:
             if not cla.clean_input_path.endswith('/'):
                 cla.clean_input_path += '/'
-            clean_input = util.load_wav(cla.clean_input_path + filename, config['dataset']['sample_rate'])
+            clean_input = util.load_txt(cla.clean_input_path + filename, config['dataset']['sample_rate'])
 
         input = {'noisy': noisy_input, 'clean': clean_input}
 
         output_filename_prefix = filename[0:-4] + '_'
 
+        # TODO this one is suspicious below
         if config['model']['condition_encoding'] == 'one_hot':
             condition_input = util.one_hot_encode(int(cla.condition_value), 29)[0]
         else:

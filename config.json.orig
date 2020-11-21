@@ -4,10 +4,10 @@
         "in_memory_percentage": 10,
         "noise_only_percent": 0.1,
         "num_condition_classes": 29,
-        "path": "data/SGs/",
+        "path": "data/NSDTSEA/",
         "regain": 0.06,
         "sample_rate": 16000,
-        "type": "sgs"
+        "type": "nsdtsea"
     },
     "model": {
         "condition_encoding": "binary",

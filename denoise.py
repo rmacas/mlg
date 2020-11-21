@@ -89,22 +89,22 @@ def denoise_sample(model, input, condition_input, batch_size, output_filename_pr
         new_snr_db = int(np.round(util.snr_db(rms_clean, rms_noise_out)))
         initial_snr_db = int(np.round(util.snr_db(rms_clean, rms_noise_in)))
 
-        output_clean_filename = output_filename_prefix + 'clean.wav'
+        output_clean_filename = output_filename_prefix + 'clean.txt'
         output_clean_filepath = os.path.join(output_path, output_clean_filename)
-        util.write_wav(valid_clean_signal, output_clean_filepath, sample_rate)
+        util.write_txt(valid_clean_signal, output_clean_filepath, sample_rate)
 
-        output_denoised_filename = output_filename_prefix + 'denoised_%ddB.wav' % new_snr_db
-        output_noisy_filename = output_filename_prefix + 'noisy_%ddB.wav' % initial_snr_db
+        output_denoised_filename = output_filename_prefix + 'denoised_%ddB.txt' % new_snr_db
+        output_noisy_filename = output_filename_prefix + 'noisy_%ddB.txt' % initial_snr_db
     else:
-        output_denoised_filename = output_filename_prefix + 'denoised.wav'
-        output_noisy_filename = output_filename_prefix + 'noisy.wav'
+        output_denoised_filename = output_filename_prefix + 'denoised.txt'
+        output_noisy_filename = output_filename_prefix + 'noisy.txt'
 
-    output_noise_filename = output_filename_prefix + 'noise.wav'
+    output_noise_filename = output_filename_prefix + 'noise.txt'
 
     output_denoised_filepath = os.path.join(output_path, output_denoised_filename)
     output_noisy_filepath = os.path.join(output_path, output_noisy_filename)
     output_noise_filepath = os.path.join(output_path, output_noise_filename)
 
-    util.write_wav(denoised_output, output_denoised_filepath, sample_rate)
-    util.write_wav(valid_noisy_signal, output_noisy_filepath, sample_rate)
-    util.write_wav(noise_output, output_noise_filepath, sample_rate)
+    util.write_txt(denoised_output, output_denoised_filepath, sample_rate)
+    util.write_txt(valid_noisy_signal, output_noisy_filepath, sample_rate)
+    util.write_txt(noise_output, output_noise_filepath, sample_rate)
