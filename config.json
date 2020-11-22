@@ -25,7 +25,7 @@
             }
         },
         "num_stacks": 3,
-        "target_field_length": 601,
+        "target_field_length": 1601,
         "target_padding": 1
     },
     "optimizer": {
