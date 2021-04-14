@@ -1,17 +1,17 @@
 {
     "dataset": {
         "extract_voice": true,
-        "in_memory_percentage": 10,
+        "in_memory_percentage": 0.1,
         "noise_only_percent": 0.1,
         "num_condition_classes": 29,
-        "path": "data/NSDTSEA/",
+        "path": "data/SGs/",
         "regain": 0.06,
         "sample_rate": 16000,
-        "type": "nsdtsea"
+        "type": "sgs"
     },
     "model": {
         "condition_encoding": "binary",
-        "dilations": 8,
+        "dilations": 9,
         "filters": {
             "lengths": {
                 "res": 3,

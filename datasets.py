@@ -6,7 +6,7 @@ import os
 import numpy as np
 import logging
 
-class NSDTSEADataset():
+class SGDataset():
 
     def __init__(self, config, model):
 
@@ -20,6 +20,7 @@ class NSDTSEADataset():
         self.speakers = {'train': [], 'test': []}
         self.speaker_mapping = {}
         self.batch_size = config['training']['batch_size']
+        # TODO find how noise only is used - does the algorithm itself generates noise only?
         self.noise_only_percent = config['dataset']['noise_only_percent']
         self.regain = config['dataset']['regain']
         self.extract_voice = config['dataset']['extract_voice']
@@ -29,11 +30,11 @@ class NSDTSEADataset():
 
     def load_dataset(self):
 
-        print('Loading NSDTSEA dataset...')
+        print('Loading SG waveform dataset...')
 
         for set in ['train', 'test']:
             for condition in ['clean', 'noisy']:
-                current_directory = os.path.join(self.path, condition+'_'+set+'set_wav')
+                current_directory = os.path.join(self.path, condition+'_'+set+'set_txt')
 
                 sequences, file_paths, speakers, speech_onset_offset_indices, regain_factors = \
                     self.load_directory(current_directory, condition)
@@ -50,7 +51,7 @@ class NSDTSEADataset():
 
     def load_directory(self, directory_path, condition):
 
-        filenames = [filename for filename in os.listdir(directory_path) if filename.endswith('.wav')]
+        filenames = [filename for filename in os.listdir(directory_path) if filename.endswith('.txt')]
 
         speakers = []
         file_paths = []
@@ -59,14 +60,14 @@ class NSDTSEADataset():
         sequences = []
         for filename in filenames:
 
-            speaker_name = filename[0:4]
+            speaker_name = filename[0:1]
             speakers.append(speaker_name)
 
             filepath = os.path.join(directory_path, filename)
 
             if condition == 'clean':
 
-                sequence = util.load_wav(filepath, self.sample_rate)
+                sequence = util.load_txt(filepath, self.sample_rate)
                 sequences.append(sequence)
                 self.num_sequences_in_memory += 1
                 regain_factors.append(self.regain / util.rms(sequence))
@@ -75,7 +76,7 @@ class NSDTSEADataset():
                     speech_onset_offset_indices.append(util.get_subsequence_with_speech_indices(sequence))
             else:
                 if self.in_memory_percentage == 1 or np.random.uniform(0, 1) <= (self.in_memory_percentage-0.5)*2:
-                    sequence = util.load_wav(filepath, self.sample_rate)
+                    sequence = util.load_txt(filepath, self.sample_rate)
                     sequences.append(sequence)
                     self.num_sequences_in_memory += 1
                 else:
@@ -94,7 +95,7 @@ class NSDTSEADataset():
     def retrieve_sequence(self, set, condition, sequence_num):
 
         if len(self.sequences[set][condition][sequence_num]) == 1:
-            sequence = util.load_wav(self.file_paths[set][condition][sequence_num], self.sample_rate)
+            sequence = util.load_txt(self.file_paths[set][condition][sequence_num], self.sample_rate)
 
             if (float(self.num_sequences_in_memory) / self.get_num_sequences_in_dataset()) < self.in_memory_percentage:
                 self.sequences[set][condition][sequence_num] = sequence

@@ -173,10 +173,24 @@ def read_wav(filename):
 
     return audio_signal, sample_rate
 
+def read_txt(filename):
+    # Reads in a txt file and gets the sample rate
+
+    waveform = np.loadtxt(filename)
+    sample_rate = 16384
+
+    return waveform, sample_rate
+
 
 def load_wav(wav_path, desired_sample_rate):
 
     sequence, sample_rate = read_wav(wav_path)
+    sequence = ensure_sample_rate(sequence, desired_sample_rate, sample_rate)
+    return sequence
+
+def load_txt(txt_path, desired_sample_rate):
+
+    sequence, sample_rate = read_txt(txt_path)
     sequence = ensure_sample_rate(sequence, desired_sample_rate, sample_rate)
     return sequence
 
@@ -189,6 +203,16 @@ def write_wav(x, filename, sample_rate):
     with warnings.catch_warnings():
         warnings.simplefilter("error")
         sf.write(filename, x, sample_rate)
+
+def write_txt(x, filename, sample_rate):
+
+    if type(x) != np.ndarray:
+        x = np.array(x)
+
+    with warnings.catch_warnings():
+        warnings.simplefilter("error")
+        # sf.write(filename, x, sample_rate)
+        np.savetxt(filename, x)
 
 
 def ensure_sample_rate(x, desired_sample_rate, file_sample_rate):
