@@ -95,7 +95,7 @@ class SGDataset():
     def retrieve_sequence(self, set, condition, sequence_num):
 
         if len(self.sequences[set][condition][sequence_num]) == 1:
-            sequence = util.load_wav(self.file_paths[set][condition][sequence_num], self.sample_rate)
+            sequence = util.load_txt(self.file_paths[set][condition][sequence_num], self.sample_rate)
 
             if (float(self.num_sequences_in_memory) / self.get_num_sequences_in_dataset()) < self.in_memory_percentage:
                 self.sequences[set][condition][sequence_num] = sequence

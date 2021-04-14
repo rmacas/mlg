@@ -1,7 +1,7 @@
 {
     "dataset": {
         "extract_voice": true,
-        "in_memory_percentage": 10,
+        "in_memory_percentage": 0.1,
         "noise_only_percent": 0.1,
         "num_condition_classes": 29,
         "path": "data/SGs/",
@@ -11,7 +11,7 @@
     },
     "model": {
         "condition_encoding": "binary",
-        "dilations": 8,
+        "dilations": 9,
         "filters": {
             "lengths": {
                 "res": 3,
@@ -25,7 +25,7 @@
             }
         },
         "num_stacks": 3,
-        "target_field_length": 601,
+        "target_field_length": 1601,
         "target_padding": 1
     },
     "optimizer": {
